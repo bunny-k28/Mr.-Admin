@@ -44,10 +44,24 @@ def index():
             return "No selected file"
 
         if file and allowed_file(file.filename):
-            cprint('stage 4 started', 'red', 'on_white')
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config["CACHE_FOLDER"], filename))
-            return 'file successfully uploaded'
+            return redirect(to('viewTables', filename=filename))
+
+
+@app.route('/viewer/tables?file:<filename>', methods=['GET', 'POST'])
+def viewTables(filename):
+    DBObject = MrAdmin(filename)
+
+    if request.method == "GET":
+        tables = DBObject.get_tables(); del DBObject
+        return render('view_table.html', 
+                filename=filename, tables=tables)
+    
+    if request.method == "POST":
+        return redirect(to('tableContentViewer', 
+        tablename=request.form.get('table-name'), 
+        filename=filename))
 
 
 
