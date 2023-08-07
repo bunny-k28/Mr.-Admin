@@ -1,6 +1,8 @@
 import os
 import dotenv
 import sqlite3
+import pandas as pd
+
 
 ALLOWED_EXTENSIONS = {
     'db',
@@ -48,3 +50,32 @@ class MrAdmin:
 
         self.sql.close(); self.db.close()
         return [name[0] for name in table_names]
+
+
+    def get_content(self, table: str, target: str='*', condition: str | None=None):
+        content_map = dict()
+
+        cols = self.sql.execute(f"PRAGMA table_info({table})").fetchall()
+        columns = [col[1] for col in cols]
+
+        if condition is None:
+            content = self.sql.execute(
+                F"SELECT {target} FROM {table}").fetchall()
+
+        elif condition is not None:
+            content = self.sql.execute(
+                F"SELECT {target} FROM {table} WHERE {condition}").fetchall()
+
+        self.sql.close(); self.db.close()
+
+        data_index = 0
+        for column in columns:
+            content_map[column] = [x[data_index] for x in content]
+            data_index += 1
+
+        data_frame = pd.DataFrame(content_map, 
+                                  columns=columns)
+        content_table = data_frame.to_html(
+            classes='table table-bordered table-hover')
+
+        return content_table

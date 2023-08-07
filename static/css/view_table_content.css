@@ -1,0 +1,38 @@
+/* css to center the element */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.card {
+    margin-top: 1.7%; 
+    background-color: darkgrey;
+}
+.card .card-header {
+    color: burlywood;
+}
+
+.navbar-nav-scroll {
+    overflow-y: auto;
+    max-height: var(--bs-scroll-height,60vh);
+}
+.navbar-nav-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.navbar-nav-scroll::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #6f2cd2;
+}
+
+
+td:first-child, th:first-child {
+    border-left: none;
+}

@@ -64,6 +64,24 @@ def viewTables(filename):
         filename=filename))
 
 
+@app.route('/viewer/content?file:<filename>&table:<tablename>', methods=['GET', 'POST'])
+def tableContentViewer(filename, tablename):
+    if request.method == "GET":
+        DBObject = MrAdmin(filename)
+        content_table = DBObject.get_content(tablename)
+
+        del DBObject
+
+        return render('view_table_content.html', 
+                      filename=filename, 
+                      table=content_table, 
+                      tablename=tablename)
+
+    if request.method == "POST":
+        pass
+
+
+
 
 ################################################################
 if __name__ == "__main__":
